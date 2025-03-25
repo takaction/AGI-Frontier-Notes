@@ -11,9 +11,9 @@ if (!window.LEANCLOUD_CONFIG) {
 
 // ==================== 类名映射 ====================
 const classTypeMap = {
-  AI_Music: window.LEANCLOUD_CONFIG?.class_mapping?.AI_music || 'AI_Music',
-  AI_Images: window.LEANCLOUD_CONFIG?.class_mapping?.AI_Images || 'AI_Images',
-  AI_Videos: window.LEANCLOUD_CONFIG?.class_mapping?.AI_Videos || 'AI_Videos'
+  AI_Music: 'AI_Music',
+  AI_Images:'AI_Images',
+  AI_Videos:'AI_Videos'
 };
 
 // ==================== 数据展示模块 ====================
