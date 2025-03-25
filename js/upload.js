@@ -36,16 +36,20 @@ async function renderGallery(category = 'gallery') {
       const isAudio = file.mime_type.startsWith('audio/');
       const isVideo = file.mime_type.startsWith('video/');
 
-      return `
-        <div class="gallery-item">
+      // 添加版权保护
+      const protectedContent = `
+        <div class="gallery-item" oncontextmenu="return false;">
           ${isImage ? 
-            `<img src="${file.thumbnailURL(400, 400)}" alt="${item.get('title')}">` : 
+            `<img src="${file.thumbnailURL(400, 400)}" alt="${item.get('title')}" class="protected-image">` : 
             isVideo ? 
-            `<video controls width="100%">
-              <source src="${file.url()}" type="${file.mime_type}">
-            </video>` :
+            `<div class="video-container">
+              <video controls width="100%" controlsList="nodownload" disablePictureInPicture>
+                <source src="${file.url()}" type="${file.mime_type}">
+              </video>
+              <div class="overlay"></div>
+            </div>` :
             isAudio ?
-            `<audio controls>
+            `<audio controls controlsList="nodownload">
               <source src="${file.url()}" type="${file.mime_type}">
             </audio>` :
             `<div class="file-icon">📁</div>`
@@ -53,10 +57,10 @@ async function renderGallery(category = 'gallery') {
           <div class="meta">
             <h3>${item.get('title') || '未命名'}</h3>
             <p>${new Date(item.createdAt).toLocaleDateString()}</p>
-            <a href="${file.url()}" target="_blank">查看原文件</a>
           </div>
         </div>
       `;
+      return protectedContent;
     }).join('');
     
     targetDiv.innerHTML = html || '<div class="empty">暂无数据</div>';
@@ -72,4 +76,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (path.includes('ai-gallery')) renderGallery('AI_Images');
   if (path.includes('ai-music')) renderGallery('AI_music');
   if (path.includes('ai-video')) renderGallery('AI_Videos');
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const path = window.location.pathname;
+  if (path.includes('ai-gallery')) {
+    // 默认加载图片
+    renderGallery('AI_Images');
+  }
+  if (path.includes('ai-music')) {
+    renderGallery('AI_music');
+  }
+  if (path.includes('ai-video')) {
+    renderGallery('AI_Videos');
+  }
 });
