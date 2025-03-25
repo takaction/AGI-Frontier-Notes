@@ -11,7 +11,7 @@ if (!window.LEANCLOUD_CONFIG) {
 
 // ==================== 类名映射 ====================
 const classTypeMap = {
-  AI_music: window.LEANCLOUD_CONFIG?.class_mapping?.AI_music || 'AI_Music',
+  AI_Music: window.LEANCLOUD_CONFIG?.class_mapping?.AI_music || 'AI_Music',
   AI_Images: window.LEANCLOUD_CONFIG?.class_mapping?.AI_Images || 'AI_Images',
   AI_Videos: window.LEANCLOUD_CONFIG?.class_mapping?.AI_Videos || 'AI_Videos'
 };
@@ -29,7 +29,6 @@ async function renderGallery(category = 'gallery') {
     query.descending('createdAt');
 
     // 修复API请求路径
-    AV._config.APIServerURL = window.LEANCLOUD_CONFIG.serverURL;
     
     const results = await query.find();
 
