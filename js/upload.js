@@ -27,11 +27,25 @@ async function renderGallery(category = 'gallery') {
     const query = new AV.Query(classTypeMap[category]);
     query.include('file'); // 关联文件对象
     query.descending('createdAt');
+
+    // 修复API请求路径
+    AV._config.APIServerURL = window.LEANCLOUD_CONFIG.serverURL;
     
     const results = await query.find();
+
+    // 添加空数据检查
+    if (!results || results.length === 0) {
+      targetDiv.innerHTML = '<div class="empty">暂无数据</div>';
+      return;
+    }
     
     const html = results.map(item => {
       const file = item.get('file');
+      if (!file) {
+        console.warn('文件数据缺失:', item);
+        return '';
+      }
+
       const isImage = file.mime_type.startsWith('image/');
       const isAudio = file.mime_type.startsWith('audio/');
       const isVideo = file.mime_type.startsWith('video/');
